@@ -1,0 +1,23 @@
+{% include 'header.html' %}
+<section>
+    <header>
+        <h1 class="logo">
+            <a class="logo_link" href="{{url_for('show_lists')}}">JList</a>
+<!--            {% if logged_in: %}-->
+            <a class="btn btn-success manage_link" href={{url_for('manage_lists',user_id=current_user.id)}}"><i class="bi bi-list-task"></i>Manage Lists</a>
+<!--            {% endif %}-->
+        </h1>
+    </header>
+</section>
+<section class="title">
+    <h2 class="manage-title">Manage your to-do list below</h2>
+</section>
+<section>
+    <ul class="list-unstyled">
+        {% for list in list_of_list: %}
+        <li><a class="btn btn-outline-secondary manage_item" href="{{url_for('todo_list',char_id=list.char_id)}}">{{list.name}} | <span class="badge text-bg-secondary"> {{task_counts[list.char_id]}}</span></a></li>
+        {% endfor %}
+    </ul>
+</section>
+
+{% include 'footer.html' %}

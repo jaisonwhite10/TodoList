@@ -1,0 +1,127 @@
+{% include 'header.html' %}
+<section>
+    <header>
+        {% with messages = get_flashed_messages() %}
+        {% if messages: %}
+        <p class="save_flash"> {{ messages[0] }} </p>
+        {% endif %}
+        {% endwith %}
+        <form method="POST">
+            <h1>
+    <!--            <form method="POST">-->
+    <!--                <label for="new_date">Enter a new date (YYYY-MM-DD):</label>-->
+    <!--                <input type="text" id="new_date" name="new_date">-->
+    <!--                <input type="submit" value="Change Date">-->
+    <!--            </form>-->
+                {% if change_date: %}
+                <input type="text" name="new_date" placeholder="My to-do list {{date}}">
+                {% elif new_date: %}
+                My to-do list {{the_new_date}}
+                {% elif todo_list: %}
+                My to-do list {{ todo_list.name }}
+                {% else: %}
+                My to-do list {{date}}
+                {% endif %}
+    <!--                <input class="btn btn-outline-dark" type="submit" value="Edit Date">-->
+
+                <button class="btn  bi bi-pencil-square" type="submit" name="change_date"></button>
+
+    <!--                <div class="input-group">-->
+    <!--                  <div class="input-group-prepend">-->
+    <!--                    <span class="input-group-text"><i class="bi bi-pencil-square"></i></span>-->
+    <!--                  </div>-->
+    <!--                  <input type="text" class="form-control" placeholder="Search">-->
+    <!--                </div>-->
+                {% if logged_in: %}
+                <a class="btn btn-outline-secondary manage_link" href={{url_for('manage_lists',user_id=current_user.id)}}"><i class="bi bi-list-task"></i>Manage Lists</a>
+
+                <form method="POST"  name="save_list" class="save_list">
+                    <button class="btn btn-success save_list" type="submit"  data-bs-target="#savethislist" value="Save This List" name="save_list">
+                        Save This List
+                    </button>
+                </form>
+
+
+                {% else: %}
+                <button class="btn btn-success save_list" type="button" data-bs-toggle="offcanvas" data-bs-target="#savethislist">
+                Save This List
+                </button>
+                {% endif %}
+            </h1>
+        </form>
+
+
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="savethislist">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Save your list!</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <div>
+              Please Login or Create an Account to save your list!
+            </div>
+            <div class="dropdown mt-3">
+              <a class="btn btn-secondary" type="button" href="{{url_for('login')}}">
+                Login
+              </a>
+               <a class="btn btn-secondary" type="button" href="{{url_for('register')}}">
+                Sign Up
+              </a>
+
+            </div>
+          </div>
+        </div>
+    </header>
+</section>
+
+<section>
+    <ul class="list-group">
+        <li>
+            <form method="POST"  name="new_task">
+                <div class="input-group input-group-lg mb-3">
+
+                        <input name="new_task" type="text" class="form-control" placeholder="Type here e.g. buy bacon"
+                               aria-label="New Task" data-bs-toggle="tooltip" data-bs-title="Some tooltip text!">
+
+                </div>
+            </form>
+        </li>
+        {% with messages = get_flashed_messages() %}
+        {% if messages[1]: %}
+        <p class="save_flash"> {{ messages[1] }} </p>
+        {% else: %}
+         {% if tasks|length == completed_task_list: %}
+        <h2>You're All Done!</h2>
+        {% endif %}
+        {% endif %}
+        {% endwith %}
+
+
+        {% for task in tasks: %}
+
+        <li class="list-group-item border-0">
+            {% if task.task_completed == False: %}
+            <form method="POST" action="{{url_for('todo_list',char_id=char_id)}}" name="checked_box">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="{{task.task_name}}" id="flexCheckDefault" name="checked_box" onchange="this.form.submit()">
+
+                    <h5 class="form-check-label" for="flexCheckDefault">
+                         {{task.task_name}}
+                    </h5>
+                </div>
+            </form>
+            {% else: %}
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="flexCheckCheckedDisabled" checked disabled>
+              <label class="form-check-label" for="flexCheckCheckedDisabled">
+                {{task.task_name}}
+              </label>
+            </div>
+            {% endif %}
+<!--                onclick="this.disabled = true;"-->
+<!--            <h5>{{task.task_name}}</h5>-->
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+{% include 'footer.html' %}

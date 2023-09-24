@@ -1,0 +1,27 @@
+{% include 'header.html' %}
+<section>
+    <header>
+        <h1 class="logo">
+            <a class="logo_link" href="{{url_for('show_lists')}}">JList</a>
+<!--            <a class="manage_link" href={{url_for('manage_lists',user_id=user_id)}}"><i class="bi bi-list-task"></i>Manage Lists</a>-->
+        </h1>
+    </header>
+</section>
+<section class="title">
+    <h2>Create your to-do list below</h2>
+</section>
+<section>
+    <form method="POST" action="{{url_for('show_lists')}}">
+        <div class="input-group input-group-lg mb-3">
+            <input name="first_task" type="text" class="form-control" placeholder="Type here e.g. buy bacon" aria-label="New Task">
+        </div>
+
+    </form>
+    <div class="alert alert-secondary" role="alert">
+      <span>Enter your first task and press enter to save</span>
+    </div>
+
+
+
+</section>
+{% include 'footer.html' %}
